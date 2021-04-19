@@ -1,0 +1,116 @@
+CREATE TABLE IF NOT EXISTS`Player`
+(
+	ID INT PRIMARY KEY,
+	Forename VARCHAR(50),
+        Surname VARCHAR(50)
+   
+);
+
+*************************************************
+CREATE TABLE IF NOT EXISTS`Skill`
+(
+		ID INT,
+		`Status` VARCHAR(50),
+        Skill VARCHAR(50),
+
+        PRIMARY KEY(ID, Skill)
+   
+);
+
+ALTER TABLE skill
+ADD FOREIGN KEY ID) REFERENCES player(ID);
+
+*************************************************
+
+CREATE TABLE IF NOT EXISTS`team`
+(
+	TeamName VARCHAR(50) PRIMARY KEY,
+        HomeTown VARCHAR(50)
+   
+);
+*************************************************
+
+CREATE TABLE IF NOT EXISTS`teamplayers`
+(
+	ID INT,
+	TeamName VARCHAR(50),
+
+        PRIMARY KEY(ID, TeamName), 
+    	FOREIGN KEY (ID) REFERENCES Plyaer(ID)
+    	FOREIGN KEY (TeamName) REFERENCES Team(TeamName)
+	
+   
+);
+*************************************************
+
+CREATE TABLE IF NOT EXISTS`game`
+(
+    TeamName VARCHAR(50),
+    `Date` DATE PRIMARY KEY,
+    Venue VARCHAR(50)
+
+);
+
+
+
+CREATE TABLE IF NOT EXISTS `GAME`
+(
+    DateOfGame DATE,
+    TeamName VARCHAR(50),
+    Venue VARCHAR(50),
+    PRIMARY KEY (DateOfGame, Name)
+);
+
+ALTER TABLE `game` ADD FOREIGN KEY (`Name`) REFERENCES `team`(`TeamName`) ;
+
+*************************************************
+
+
+CREATE TABLE IF NOT EXISTS `gamepoints`
+(
+    DateOfGame DATE,
+    ID INT,
+    Points INT, 
+    PRIMARY KEY(DateOfGame, ID)
+);
+
+ALTER TABLE `gamepoints` ADD FOREIGN KEY (`DateOfGame`) REFERENCES `game`(`DateOfGame`) ;
+
+ALTER TABLE `gamepoints` ADD FOREIGN KEY (`ID`) REFERENCES `player`(`ID`) ;
+
+*************************************************************
+CREATE TABLE IF NOT EXISTS`tempload`
+(
+	ID INT PRIMARY KEY,
+	Forename VARCHAR(50),
+    	Surname VARCHAR(50), 
+	TeamName VARCHAR(50),
+    	`Status` VARCHAR(50), 
+    	Skill VARCHAR(50), 
+    	TeamName2 VARCHAR(50), 
+    	HomeTown VARCHAR(50), 
+    	Venue VARCHAR(50), 
+    	`Date` DATE,
+    	Points INT
+    
+);
+*************************************************
+
+
+INSERT INTO Player (ID, ForeName, Surname)
+SELECT DISTINCT ID, ForeName, Surname FROM tempload
+
+INSERT INTO team (TeamName, HomeTown)
+SELECT DISTINCT TeamName, HomeTown FROM tempload
+
+INSERT INTO skill (ID, Status, Skill)
+SELECT DISTINCT ID, Status, Skill FROM tempload
+
+INSERT INTO teamplayers (ID, TeamName)
+SELECT DISTINCT ID, TeamName FROM tempload
+
+INSERT INTO game (TeamName, Date, Venue)
+SELECT DISTINCT TeamName, Date, Venue FROM tempload
+
+INSERT INTO gamepoints (Date, ID, Points)
+SELECT DISTINCT Date, ID, Points FROM tempload
